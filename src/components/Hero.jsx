@@ -1,35 +1,75 @@
 import Spline from '@splinetool/react-spline';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { useEffect } from 'react';
 
 export default function Hero() {
+  const mx = useMotionValue(0.5);
+  const my = useMotionValue(0.5);
+  const translateX = useTransform(mx, [0, 1], [-10, 10]);
+  const translateY = useTransform(my, [0, 1], [8, -8]);
+
+  useEffect(() => {
+    const handle = (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      mx.set(x);
+      my.set(y);
+    };
+    window.addEventListener('mousemove', handle);
+    return () => window.removeEventListener('mousemove', handle);
+  }, [mx, my]);
+
   return (
-    <section id="home" className="relative w-full min-h-[84vh] md:min-h-[92vh]">
+    <section id="home" className="relative min-h-[92vh] w-full overflow-hidden bg-black">
       <div className="absolute inset-0">
-        <Spline scene="https://prod.spline.design/LU2mWMPbF3Qi1Qxh/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+        <Spline
+          scene="https://prod.spline.design/ppI7eAudW7IbKhKs/scene.splinecode"
+          style={{ width: '100%', height: '100%' }}
+        />
       </div>
 
-      <div className="relative z-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-24">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold bg-white/70 dark:bg-neutral-900/70 backdrop-blur border border-neutral-200/60 dark:border-neutral-800 text-neutral-700 dark:text-neutral-200">Consulting • Engineering • Delivery</span>
-            <h1 className="mt-6 text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-600 dark:from-white dark:via-neutral-200 dark:to-neutral-400 bg-clip-text text-transparent">
-              Build standout IoT, web, and software experiences
-            </h1>
-            <p className="mt-6 text-lg text-neutral-700 dark:text-neutral-300 max-w-2xl">
-              ConsultantsDen is a product-focused consulting studio helping ambitious teams ship beautiful, reliable systems — from connected devices to cloud platforms and modern web apps.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <a href="#contact" className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold text-white bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200">
-                Start a project
-              </a>
-              <a href="#services" className="inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold bg-white/80 hover:bg-white dark:bg-neutral-900/80 dark:hover:bg-neutral-900 backdrop-blur border border-neutral-200/60 dark:border-neutral-800 text-neutral-900 dark:text-white">
-                Explore services
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/70 via-black/20 to-black/80" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_45%,black_100%)]" />
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-neutral-950 dark:via-neutral-950/80" />
+      <div className="relative mx-auto flex min-h-[92vh] max-w-7xl flex-col items-center justify-center px-6 text-center">
+        <motion.h1
+          style={{ translateX, translateY }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+          className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-white"
+        >
+          Futuristic systems for a connected world
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: 'easeOut', delay: 0.1 }}
+          className="mt-4 max-w-2xl text-base sm:text-lg md:text-xl text-white/80"
+        >
+          ConsultantsDen crafts immersive IoT, web, and software experiences—powered by elegant engineering and thoughtful design.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: 'easeOut', delay: 0.2 }}
+          className="mt-8 flex flex-col sm:flex-row items-center gap-3"
+        >
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center rounded-md bg-cyan-500 px-5 py-3 text-sm font-semibold text-black shadow-sm hover:bg-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-300 focus:ring-offset-2 focus:ring-offset-black"
+          >
+            Start a project
+          </a>
+          <a
+            href="#services"
+            className="inline-flex items-center justify-center rounded-md border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
+          >
+            Explore services
+          </a>
+        </motion.div>
+      </div>
     </section>
   );
 }
